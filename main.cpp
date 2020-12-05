@@ -1,3 +1,4 @@
+#include "main.h"
 #include <iostream>
 #include <memory>
 
@@ -5,15 +6,16 @@ void gameSetup(std::shared_ptr<char[6][6]> board, std::shared_ptr<bool[2]> IsAi)
 
     bool validated = false;
 
-    //intiate baord values
+    // initiate board values
     for(int i = 0; i < 6; i++){
         for(int j = 0; j < 6; j++){
-            board[i][j] = ' ';
+          board.get()[i][j] = ' ';
         }
     }
 
     while(!validated){
         //TODO create player options when AI exists
+        validated = true;
     }
 
 }
@@ -21,17 +23,23 @@ void gameSetup(std::shared_ptr<char[6][6]> board, std::shared_ptr<bool[2]> IsAi)
 
 int main() {
 
-    std::shared_ptr<char[6][6]> Board = NULL;
-    std::shared_ptr<bool[2]> IsAi = NULL;
-    gameSetup(Board, IsAi);
+  std::shared_ptr<char[6][6]> Board(new char[6][6]);
+  std::shared_ptr<bool[2]> IsAi(new bool[2]);
 
-    bool running = true;
-    int i = 0;
-    while(running){
-        i += 1;
-        std::cout << i;
-    }
+  Board[1][1] = ' ';
 
-    std::cout << "Hello, World!" << std::endl;
+  gameSetup(Board, IsAi);
+
+  bool running = true;
+  int i = 0;
+  while (running) {
+    BoardLogic::PrintBoard(Board);
+    player::spiller(Board);
+    i += 1;
+    std::cout << i;
+    running = false;
+  }
+
+  std::cout << "Hello, World!" << std::endl;
     return 0;
 }
