@@ -1,0 +1,1 @@
+add_library(BoardLogic BoardLogic.cpp)

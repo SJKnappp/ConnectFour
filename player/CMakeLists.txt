@@ -1,0 +1,1 @@
+ADD_LIBRARY(Player playerMain.cpp)
