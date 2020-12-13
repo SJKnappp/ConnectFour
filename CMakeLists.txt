@@ -4,8 +4,9 @@ project(ConnectFour)
 set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory(GameLogic)
-add_subdirectory(spiller)
+add_subdirectory(player)
 add_subdirectory(BoardTypes)
+add_subdirectory(Ai)
 
 add_executable(ConnectFour main.cpp)
 
