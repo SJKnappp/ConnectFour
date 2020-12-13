@@ -5,7 +5,11 @@
 #ifndef CONNECTFOUR_MAIN_H
 #define CONNECTFOUR_MAIN_H
 
+#include <iostream>
+#include <memory>
+
+#include "Ai/Ai.h"
 #include "GameLogic/BoardLogic.h"
-#include "spiller/playerMain.h"
+#include "player/playerMain.h"
 
 #endif // CONNECTFOUR_MAIN_H

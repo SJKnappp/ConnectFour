@@ -6,7 +6,7 @@
 #define CONNECTFOUR_AI_H
 
 namespace Ai {
-int minMax() {}
+int minMax();
 }; // namespace Ai
 
 #endif // CONNECTFOUR_AI_H

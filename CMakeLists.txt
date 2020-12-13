@@ -12,4 +12,5 @@ add_executable(ConnectFour main.cpp)
 
 target_link_libraries(ConnectFour
         Player
-        BoardLogic)
+        BoardLogic
+        Ai)

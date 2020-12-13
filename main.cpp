@@ -1,6 +1,4 @@
 #include "main.h"
-#include <iostream>
-#include <memory>
 
 void gameSetup(std::shared_ptr<char[6][6]> board,
                std::shared_ptr<bool[2]> IsAi) {
