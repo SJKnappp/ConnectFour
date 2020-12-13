@@ -6,6 +6,6 @@
 #define CONNECTFOUR_MAIN_H
 
 #include "GameLogic/BoardLogic.h"
-#include "player/playerMain.h"
+#include "spiller/playerMain.h"
 
 #endif // CONNECTFOUR_MAIN_H
