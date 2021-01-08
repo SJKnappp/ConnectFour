@@ -35,14 +35,14 @@ int main() {
     BoardLogic::PrintBoard(board);
     int move = player::move(board, colour);
 
-    bool checkWin = BoardLogic::checkWin(board, move, -10, colour);
-    if (checkWin) {
+    int checkWin = BoardLogic::checkWin(board, move, -10, colour);
+    if (checkWin == 3) {
       BoardLogic::PrintBoard(board);
-      std::cout << colour << " has won0";
+      std::cout << colour << " has won";
       return 0;
     }
     bool checkEnd = BoardLogic::checkEnd(board);
-    if (checkEnd == true) {
+    if (checkEnd == 1) {
       BoardLogic::PrintBoard(board);
       std::cout << "game is drawn";
       return 0;

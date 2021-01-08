@@ -52,57 +52,64 @@ int getHeight(std::shared_ptr<char[6][6]> board, int move) {
 }
 
 // dir 0 still 1 - 8 clockwise
-bool checkWin(std::shared_ptr<char[6][6]> board, int move, int height,
-              char player, int count, int direction) {
-  bool result = false;
+int checkWin(std::shared_ptr<char[6][6]> board, int move, int height,
+             char player, int count, int direction) {
+  int result = 0;
+  int best = 0;
   if (height == -10) {
     height = getHeight(board, move);
   }
 
   if (move < 0 || move >= 6 || height < 0 || height >= 6) {
-    return false;
+    return 0;
   }
 
   if (board[move][height] != player)
-    return false;
+    return 0;
 
   if (count < 3) {
     if (direction == 0 || direction == 1) {
-      result =
-          result || checkWin(board, move + 1, height, player, count + 1, 1);
-    }
-    if (direction == 0 || direction == 2) {
-      result =
-          result || checkWin(board, move + 1, height + 1, player, count + 1, 2);
-    }
-    if (direction == 0 || direction == 3) {
-      result =
-          result || checkWin(board, move, height + 1, player, count + 1, 3);
-    }
-    if (direction == 0 || direction == 4) {
-      result =
-          result || checkWin(board, move - 1, height + 1, player, count + 1, 4);
+      result = checkWin(board, move + 1, height, player, count + 1, 1);
     }
     if (direction == 0 || direction == 5) {
-      result =
-          result || checkWin(board, move - 1, height, player, count + 1, 5);
+      result += checkWin(board, move - 1, height, player, count + 1, 5);
+      if (best < result)
+        best = result;
+    }
+    if (direction == 0 || direction == 2) {
+      result = checkWin(board, move + 1, height + 1, player, count + 1, 2);
     }
     if (direction == 0 || direction == 6) {
-      result =
-          result || checkWin(board, move - 1, height - 1, player, count + 1, 6);
+      result += checkWin(board, move - 1, height - 1, player, count + 1, 6);
+      if (best < result)
+        best = result;
+    }
+    if (direction == 0 || direction == 3) {
+      result = checkWin(board, move, height + 1, player, count + 1, 3);
     }
     if (direction == 0 || direction == 7) {
-      result =
-          result || checkWin(board, move, height - 1, player, count + 1, 7);
+      result += checkWin(board, move, height - 1, player, count + 1, 7);
+      if (best < result)
+        best = result;
+    }
+    if (direction == 0 || direction == 4) {
+      result = checkWin(board, move - 1, height + 1, player, count + 1, 4);
     }
     if (direction == 0 || direction == 8) {
-      result =
-          result || checkWin(board, move + 1, height - 1, player, count + 1, 8);
+      result += checkWin(board, move + 1, height - 1, player, count + 1, 8);
+      if (best < result)
+        best = result;
     }
+    if (direction != 0)
+      best = result;
+    if (best < result)
+      best = result;
 
-    return result;
+    if (best > count)
+      return best;
+    return count;
   }
-  return true;
+  return count;
 }
 
 } // namespace BoardLogic
