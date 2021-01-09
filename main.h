@@ -12,4 +12,8 @@
 #include "GameLogic/BoardLogic.h"
 #include "player/playerMain.h"
 
+int main();
+bool gameSetup(std::shared_ptr<char[6][6]> board,
+               std::shared_ptr<bool[2]> IsAi);
+
 #endif // CONNECTFOUR_MAIN_H
