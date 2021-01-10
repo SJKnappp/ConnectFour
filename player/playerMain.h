@@ -9,7 +9,7 @@
 #include <iostream>
 #include <memory>
 namespace player {
-int move(std::shared_ptr<char[7][6]> board, char colour);
+int move(std::shared_ptr<BoardLogic> board, char colour);
 };
 
 #endif // CONNECTFOUR_PLAYERMAIN_H

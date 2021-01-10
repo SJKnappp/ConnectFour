@@ -144,3 +144,13 @@ int BoardLogic::checkWin(int move, int height, char player, int count,
   return count;
 }
 
+bool BoardLogic::checkMoveMade(BoardLogic old) {
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 6; j++) {
+      if (this->board[i][j] != old.board[i][j]) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

@@ -40,36 +40,41 @@ int main() {
 
   srand(time(NULL));
 
-  std::shared_ptr<char[7][6]> board(new char[7][6]);
   std::shared_ptr<bool[2]> IsAi(new bool[2]);
-
-  board[1][1] = ' ';
-
-  BoardLogic::Board board1();
-  gameSetup(board, IsAi);
+  std::shared_ptr<BoardLogic> board(new BoardLogic(IsAi));
 
   char colour = 'y';
   int player = 0;
 
   bool running = true;
+
+  std::cout << colour << " please select first move";
+  std::cout << "0123456";
+
   while (running) {
 
-    BoardLogic::PrintBoard(board);
     int move;
+    BoardLogic old = *board;
     if (IsAi[player] == false) {
-      move = player::move(board, colour);
+      move = player::move(std::shared_ptr<BoardLogic>(board), colour);
     } else {
-      move = Ai::AiTurn(board, colour, false, 31);
+      move = Ai::AiTurn(board, colour, false, 4);
     }
-    int checkWin = BoardLogic::checkWin(board, move, -10, colour);
+    board->PrintBoard();
+    bool moveMade = board->checkMoveMade(old);
+    if (moveMade == false) {
+      std::cout << "error: no move made";
+      return 1;
+    }
+    int checkWin = board->checkWin(move, -10, colour);
     if (checkWin == 3) {
-      BoardLogic::PrintBoard(board);
+      board->PrintBoard();
       std::cout << colour << " has won";
       return 0;
     }
-    bool checkEnd = BoardLogic::checkEnd(board);
+    bool checkEnd = board->checkEnd();
     if (checkEnd == 1) {
-      BoardLogic::PrintBoard(board);
+      board->PrintBoard();
       std::cout << "game is drawn";
       return 0;
     }

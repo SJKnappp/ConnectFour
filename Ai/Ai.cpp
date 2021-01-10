@@ -6,40 +6,40 @@
 
 namespace Ai {
 
-int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
+int AiTurn(std::shared_ptr<BoardLogic> board, char colour, bool first,
            int targetDepth) {
   std::vector<Move> turnCollection;
   Move turn(-1, -1);
-  char[7][6] tempBoard = std::make_shared<Board>(board);
 
   if (first) {
     turn.move = rand() % 6;
   } else {
-    turnCollection = minMax(tempBoard, targetDepth, colour);
+    turnCollection = minMax(*board, targetDepth, colour);
     turn = turnCollection[rand() % turnCollection.size()];
   }
-  BoardLogic::addMove(board, turn.move, colour);
+
+  board->addMove(turn.move, colour);
 
   return turn.move;
 }
 
-std::vector<Move> minMax(char[7][6] board, int targetDepth, char colour,
+std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
                          int depth, int friendly) {
   std::vector<Move> best;
   best.push_back(Move(-1, -1000));
 
   for (int i = 0; i < 7; i++) {
 
-    if (!BoardLogic::boardSpaceAvailable(board, i)) {
+    if (!board.boardSpaceAvailable(i)) {
       continue;
     }
 
-    int currentScore = Score(board, colour, friendly, i);
+    int currentScore = friendly * Score(board, colour, friendly, i);
     Move currentMove(i, currentScore);
 
     if (depth < targetDepth) {
-      std::shared_ptr<char[7][6]> tempBoard = board;
-      BoardLogic::addMove(tempBoard, i, colour);
+      BoardLogic tempBoard = board;
+      tempBoard.addMove(i, colour);
       std::vector<Move> scoreCollection =
           minMax(tempBoard, targetDepth, colour, depth + 1, friendly * -1);
       Move score = scoreCollection[rand() % scoreCollection.size()];
@@ -56,8 +56,8 @@ std::vector<Move> minMax(char[7][6] board, int targetDepth, char colour,
   return best;
 }
 
-int Score(std::shared_ptr<char[7][6]> board, int colour, int friendly, int move,
-          int height, int count, int direction) {
+int Score(BoardLogic board, int colour, int friendly, int move, int height,
+          int count, int direction) {
   bool result = false;
   bool player = colour;
   if (friendly == -1) {
@@ -68,14 +68,14 @@ int Score(std::shared_ptr<char[7][6]> board, int colour, int friendly, int move,
   }
 
   if (height == -10) {
-    height = BoardLogic::getHeight(board, move);
+    height = board.getHeight(move);
   }
 
   if (move < 0 || move >= 6 || height < 0 || height >= 6) {
     return false;
   }
 
-  if (board[move][height] != player)
+  if (board.board[move][height] != player)
     return false;
 
   int temp;

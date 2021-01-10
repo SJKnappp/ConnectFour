@@ -16,7 +16,7 @@ int move(std::shared_ptr<BoardLogic> board, char colour) {
 
     if (move < 7 && move >= 0) {
 
-      bool result = board->addMove(board, move, colour);
+      bool result = board->addMove(move, colour);
 
       if (result == true) {
         return move;

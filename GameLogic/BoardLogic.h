@@ -20,6 +20,7 @@ public:
   int checkWin(int move, int height, char player, int count = 0,
                int direction = 0);
   int getHeight(int move);
+  bool checkMoveMade(BoardLogic old);
 }; // namespace BoardLogic
 
 #endif // CONNECTFOUR_BOARDLOGIC_H
