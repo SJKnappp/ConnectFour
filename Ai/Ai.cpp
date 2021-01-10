@@ -10,11 +10,12 @@ int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
            int targetDepth) {
   std::vector<Move> turnCollection;
   Move turn(-1, -1);
+  char[7][6] tempBoard = std::make_shared<Board>(board);
 
   if (first) {
     turn.move = rand() % 6;
   } else {
-    turnCollection = minMax(board, targetDepth, colour);
+    turnCollection = minMax(tempBoard, targetDepth, colour);
     turn = turnCollection[rand() % turnCollection.size()];
   }
   BoardLogic::addMove(board, turn.move, colour);
@@ -22,21 +23,25 @@ int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
   return turn.move;
 }
 
-std::vector<Move> minMax(std::shared_ptr<char[7][6]> board, int targetDepth,
-                         char colour, int depth, int friendly) {
+std::vector<Move> minMax(char[7][6] board, int targetDepth, char colour,
+                         int depth, int friendly) {
   std::vector<Move> best;
   best.push_back(Move(-1, -1000));
 
   for (int i = 0; i < 7; i++) {
-    int currentScore = Score(board, colour, friendly, i);
-    Move currentMove(i, currentScore);
 
     if (!BoardLogic::boardSpaceAvailable(board, i)) {
       continue;
     }
+
+    int currentScore = Score(board, colour, friendly, i);
+    Move currentMove(i, currentScore);
+
     if (depth < targetDepth) {
+      std::shared_ptr<char[7][6]> tempBoard = board;
+      BoardLogic::addMove(tempBoard, i, colour);
       std::vector<Move> scoreCollection =
-          minMax(board, targetDepth, colour, depth + 1, friendly * -1);
+          minMax(tempBoard, targetDepth, colour, depth + 1, friendly * -1);
       Move score = scoreCollection[rand() % scoreCollection.size()];
 
       currentMove.score = score.score;

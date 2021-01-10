@@ -5,7 +5,7 @@
 #include "playerMain.h"
 
 namespace player {
-int move(std::shared_ptr<char[7][6]> board, char colour) {
+int move(std::shared_ptr<BoardLogic> board, char colour) {
   int move;
   bool running = true;
 
@@ -16,7 +16,7 @@ int move(std::shared_ptr<char[7][6]> board, char colour) {
 
     if (move < 7 && move >= 0) {
 
-      bool result = BoardLogic::addMove(board, move, colour);
+      bool result = board->addMove(board, move, colour);
 
       if (result == true) {
         return move;

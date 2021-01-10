@@ -45,6 +45,7 @@ int main() {
 
   board[1][1] = ' ';
 
+  BoardLogic::Board board1();
   gameSetup(board, IsAi);
 
   char colour = 'y';
@@ -58,7 +59,7 @@ int main() {
     if (IsAi[player] == false) {
       move = player::move(board, colour);
     } else {
-      move = Ai::AiTurn(board, colour, false, 2);
+      move = Ai::AiTurn(board, colour, false, 31);
     }
     int checkWin = BoardLogic::checkWin(board, move, -10, colour);
     if (checkWin == 3) {

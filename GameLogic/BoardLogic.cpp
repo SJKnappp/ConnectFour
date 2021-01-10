@@ -4,9 +4,41 @@
 
 #include "BoardLogic.h"
 
-namespace BoardLogic {
+BoardLogic::BoardLogic(std::shared_ptr<bool[2]> IsAi) {
+  bool validated = false;
 
-void PrintBoard(std::shared_ptr<char[7][6]> board) {
+  // initiate board values
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 6; j++) {
+      board[i][j] = ' ';
+    }
+  }
+
+  char colour = 'y';
+  for (int x = 0; x < 2; x++) {
+    bool isAi;
+    bool chossen = false;
+    std::string choice;
+    std::cout << "is " << colour << " an AI y/n";
+
+    while (chossen == false) {
+      std::cin >> choice;
+      chossen = true;
+      if (choice == "y")
+        isAi = true;
+      else if (choice == "n")
+        isAi = false;
+      else {
+        chossen = false;
+        std::cout << "option no recognised is " << colour << " an AI y/n: ";
+      }
+    }
+    colour = 'r';
+    IsAi[x] = isAi;
+  }
+}
+
+void BoardLogic::PrintBoard() {
   std::cout << "0123456" << std::endl;
   for (int j = 5; j >= 0; j--) {
     for (int i = 0; i < 7; i++) {
@@ -16,14 +48,14 @@ void PrintBoard(std::shared_ptr<char[7][6]> board) {
   }
 }
 
-bool boardSpaceAvailable(std::shared_ptr<char[7][6]> board, int move) {
+bool BoardLogic::boardSpaceAvailable(int move) {
   if (board[move][5] == ' ')
     return true;
   return false;
 }
 
-bool addMove(std::shared_ptr<char[7][6]> board, int move, char player) {
-  if (boardSpaceAvailable(board, move) == true) {
+bool BoardLogic::addMove(int move, char player) {
+  if (this->boardSpaceAvailable(move) == true) {
     for (int i = 0; i < 6; i++) {
       if (board[move][i] == ' ') {
         board[move][i] = player;
@@ -34,7 +66,7 @@ bool addMove(std::shared_ptr<char[7][6]> board, int move, char player) {
     return false;
 }
 
-bool checkEnd(std::shared_ptr<char[7][6]> board) {
+bool BoardLogic::checkEnd() {
   for (int i = 0; i < 6; i++) {
     if (board[i][5] == ' ') {
       return false;
@@ -43,7 +75,7 @@ bool checkEnd(std::shared_ptr<char[7][6]> board) {
   return true;
 }
 
-int getHeight(std::shared_ptr<char[7][6]> board, int move) {
+int BoardLogic::getHeight(int move) {
   for (int i = 5; i > 0; i--) {
     if (board[move][i] != ' ') {
       return i;
@@ -52,12 +84,12 @@ int getHeight(std::shared_ptr<char[7][6]> board, int move) {
 }
 
 // dir 0 still 1 - 8 clockwise
-int checkWin(std::shared_ptr<char[7][6]> board, int move, int height,
-             char player, int count, int direction) {
+int BoardLogic::checkWin(int move, int height, char player, int count,
+                         int direction) {
   int result = 0;
   int best = 0;
   if (height == -10) {
-    height = getHeight(board, move);
+    height = getHeight(move);
   }
 
   if (move < 0 || move >= 7 || height < 0 || height >= 6) {
@@ -69,34 +101,34 @@ int checkWin(std::shared_ptr<char[7][6]> board, int move, int height,
 
   if (count < 3) {
     if (direction == 0 || direction == 1) {
-      result = checkWin(board, move + 1, height, player, count + 1, 1);
+      result = checkWin(move + 1, height, player, count + 1, 1);
     }
     if (direction == 0 || direction == 5) {
-      result += checkWin(board, move - 1, height, player, count + 1, 5);
+      result += checkWin(move - 1, height, player, count + 1, 5);
       if (best < result)
         best = result;
     }
     if (direction == 0 || direction == 2) {
-      result = checkWin(board, move + 1, height + 1, player, count + 1, 2);
+      result = checkWin(move + 1, height + 1, player, count + 1, 2);
     }
     if (direction == 0 || direction == 6) {
-      result += checkWin(board, move - 1, height - 1, player, count + 1, 6);
+      result += checkWin(move - 1, height - 1, player, count + 1, 6);
       if (best < result)
         best = result;
     }
     if (direction == 0 || direction == 3) {
-      result = checkWin(board, move, height + 1, player, count + 1, 3);
+      result = checkWin(move, height + 1, player, count + 1, 3);
     }
     if (direction == 0 || direction == 7) {
-      result += checkWin(board, move, height - 1, player, count + 1, 7);
+      result += checkWin(move, height - 1, player, count + 1, 7);
       if (best < result)
         best = result;
     }
     if (direction == 0 || direction == 4) {
-      result = checkWin(board, move - 1, height + 1, player, count + 1, 4);
+      result = checkWin(move - 1, height + 1, player, count + 1, 4);
     }
     if (direction == 0 || direction == 8) {
-      result += checkWin(board, move + 1, height - 1, player, count + 1, 8);
+      result += checkWin(move + 1, height - 1, player, count + 1, 8);
       if (best < result)
         best = result;
     }
@@ -112,4 +144,3 @@ int checkWin(std::shared_ptr<char[7][6]> board, int move, int height,
   return count;
 }
 
-} // namespace BoardLogic

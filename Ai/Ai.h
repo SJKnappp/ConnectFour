@@ -22,8 +22,8 @@ public:
   }
 };
 
-std::vector<Move> minMax(std::shared_ptr<char[7][6]> board, int targetDepth,
-                         char colour, int depth = 0,
+std::vector<Move> minMax(BoardLogic::Board board, int targetDepth, char colour,
+                         int depth = 0,
                          int friendly = 1); // returns Score
 int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
            int targetDepth); // returns move
