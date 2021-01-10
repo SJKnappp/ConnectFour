@@ -22,13 +22,13 @@ public:
   }
 };
 
-std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
+std::vector<Move> minMax(std::shared_ptr<char[7][6]> board, int targetDepth,
                          char colour, int depth = 0,
                          int friendly = 1); // returns Score
-int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
+int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
            int targetDepth); // returns move
                              // namespace Ai
-int Score(std::shared_ptr<char[6][6]> board, int colour, int friendly, int move,
+int Score(std::shared_ptr<char[7][6]> board, int colour, int friendly, int move,
           int height = -10, int count = 0, int direction = 0);
 }; // namespace Ai
 

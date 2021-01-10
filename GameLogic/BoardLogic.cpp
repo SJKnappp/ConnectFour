@@ -6,23 +6,23 @@
 
 namespace BoardLogic {
 
-void PrintBoard(std::shared_ptr<char[6][6]> board) {
-  std::cout << "012345" << std::endl;
+void PrintBoard(std::shared_ptr<char[7][6]> board) {
+  std::cout << "0123456" << std::endl;
   for (int j = 5; j >= 0; j--) {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
       std::cout << board[i][j];
     }
     std::cout << std::endl;
   }
 }
 
-bool boardSpaceAvailable(std::shared_ptr<char[6][6]> board, int move) {
+bool boardSpaceAvailable(std::shared_ptr<char[7][6]> board, int move) {
   if (board[move][5] == ' ')
     return true;
   return false;
 }
 
-bool addMove(std::shared_ptr<char[6][6]> board, int move, char player) {
+bool addMove(std::shared_ptr<char[7][6]> board, int move, char player) {
   if (boardSpaceAvailable(board, move) == true) {
     for (int i = 0; i < 6; i++) {
       if (board[move][i] == ' ') {
@@ -34,7 +34,7 @@ bool addMove(std::shared_ptr<char[6][6]> board, int move, char player) {
     return false;
 }
 
-bool checkEnd(std::shared_ptr<char[6][6]> board) {
+bool checkEnd(std::shared_ptr<char[7][6]> board) {
   for (int i = 0; i < 6; i++) {
     if (board[i][5] == ' ') {
       return false;
@@ -43,7 +43,7 @@ bool checkEnd(std::shared_ptr<char[6][6]> board) {
   return true;
 }
 
-int getHeight(std::shared_ptr<char[6][6]> board, int move) {
+int getHeight(std::shared_ptr<char[7][6]> board, int move) {
   for (int i = 5; i > 0; i--) {
     if (board[move][i] != ' ') {
       return i;
@@ -52,7 +52,7 @@ int getHeight(std::shared_ptr<char[6][6]> board, int move) {
 }
 
 // dir 0 still 1 - 8 clockwise
-int checkWin(std::shared_ptr<char[6][6]> board, int move, int height,
+int checkWin(std::shared_ptr<char[7][6]> board, int move, int height,
              char player, int count, int direction) {
   int result = 0;
   int best = 0;
@@ -60,7 +60,7 @@ int checkWin(std::shared_ptr<char[6][6]> board, int move, int height,
     height = getHeight(board, move);
   }
 
-  if (move < 0 || move >= 6 || height < 0 || height >= 6) {
+  if (move < 0 || move >= 7 || height < 0 || height >= 6) {
     return 0;
   }
 

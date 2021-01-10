@@ -6,7 +6,7 @@
 
 namespace Ai {
 
-int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
+int AiTurn(std::shared_ptr<char[7][6]> board, char colour, bool first,
            int targetDepth) {
   std::vector<Move> turnCollection;
   Move turn(-1, -1);
@@ -22,12 +22,12 @@ int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
   return turn.move;
 }
 
-std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
+std::vector<Move> minMax(std::shared_ptr<char[7][6]> board, int targetDepth,
                          char colour, int depth, int friendly) {
   std::vector<Move> best;
   best.push_back(Move(-1, -1000));
 
-  for (int i = 0; i < 6; i++) {
+  for (int i = 0; i < 7; i++) {
     int currentScore = Score(board, colour, friendly, i);
     Move currentMove(i, currentScore);
 
@@ -51,7 +51,7 @@ std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
   return best;
 }
 
-int Score(std::shared_ptr<char[6][6]> board, int colour, int friendly, int move,
+int Score(std::shared_ptr<char[7][6]> board, int colour, int friendly, int move,
           int height, int count, int direction) {
   bool result = false;
   bool player = colour;
