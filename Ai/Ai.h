@@ -14,19 +14,22 @@ namespace Ai {
 
 class Move {
 public:
-  int move, score;
+  int move = 7, score = -1000;
 
-  Move() {
-    move = 7;
-    score = -1000000;
+  Move(int Move, int Score) {
+    move = Move;
+    score = Score;
   }
 };
 
 std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
-                         int depth = 0,
-                         int friendly = 1); // returns score
+                         char colour, int depth = 0,
+                         int friendly = 1); // returns Score
 int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
            int targetDepth); // returns move
-};                           // namespace Ai
+                             // namespace Ai
+int Score(std::shared_ptr<char[6][6]> board, int colour, int friendly, int move,
+          int height = -10, int count = 0, int direction = 0);
+}; // namespace Ai
 
 #endif // CONNECTFOUR_AI_H

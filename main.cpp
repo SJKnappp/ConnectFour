@@ -28,7 +28,7 @@ void gameSetup(std::shared_ptr<char[6][6]> board,
         isAi = false;
       else {
         chossen = false;
-        std::cout << "option no recognised is " << colour << " an AI y/n";
+        std::cout << "option no recognised is " << colour << " an AI y/n: ";
       }
     }
     colour = 'r';
@@ -58,7 +58,7 @@ int main() {
     if (IsAi[player] == false) {
       move = player::move(board, colour);
     } else {
-      move = Ai::AiTurn(board, colour, true, 4);
+      move = Ai::AiTurn(board, colour, false, 8);
     }
     int checkWin = BoardLogic::checkWin(board, move, -10, colour);
     if (checkWin == 3) {
