@@ -6,30 +6,40 @@
 
 namespace Ai {
 
-int AiTurn(std::shared_ptr<char[6][6]> board, bool first, int targetDepth) {
-  Move turn = Move();
+int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
+           int targetDepth) {
+  std::vector<Move> turnCollection;
+  Move turn;
 
   if (first) {
     turn.move = rand() % 6;
   } else {
-    turn = minMax(board, targetDepth);
+    turnCollection = minMax(board, targetDepth);
+    turn = turnCollection[rand() % turnCollection.size()];
   }
+  BoardLogic::addMove(board, turn.move, colour);
 
   return turn.move;
 }
 
-Move minMax(std::shared_ptr<char[6][6]> board, int targetDepth, int depth,
-            int friendly) {
-  Move best = Move();
+std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
+                         int depth, int friendly) {
+  std::vector<Move> best;
 
   for (int i = 0; i < 6; i++) {
+    Move currentMove();
     if (!BoardLogic::boardSpaceAvailable(board, i)) {
       continue;
     }
-    Move score = minMax(board, targetDepth, depth++, friendly * -1);
-    if (score.score > best.score) {
-      best = score;
+    std::vector<Move> scoreCollection =
+        minMax(board, targetDepth, depth++, friendly * -1);
+    Move score = scoreCollection[rand() % scoreCollection.size()];
+    if (score.score > best[0].score) {
+      best.clear();
+      best.push_back(score);
     }
+    if (score.score = best[0].score)
+      best.push_back(score);
   }
 
   return best;
@@ -104,7 +114,6 @@ int score(std::shared_ptr<char[6][6]> board, int colour, int friendly, int move,
 
     return result;
   }
-  return true;
 }
 
 } // namespace Ai

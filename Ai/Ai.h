@@ -8,6 +8,7 @@
 #include "../GameLogic/BoardLogic.h"
 #include <stdlib.h>
 #include <thread>
+#include <vector>
 
 namespace Ai {
 
@@ -21,9 +22,10 @@ public:
   }
 };
 
-Move minMax(std::shared_ptr<char[6][6]> board, int targetDepth, int depth = 0,
-            int friendly = 1); // returns score
-int AiTurn(std::shared_ptr<char[6][6]> board, bool first,
+std::vector<Move> minMax(std::shared_ptr<char[6][6]> board, int targetDepth,
+                         int depth = 0,
+                         int friendly = 1); // returns score
+int AiTurn(std::shared_ptr<char[6][6]> board, char colour, bool first,
            int targetDepth); // returns move
 };                           // namespace Ai
 

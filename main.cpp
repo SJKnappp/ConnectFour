@@ -1,6 +1,6 @@
 #include "main.h"
 
-bool gameSetup(std::shared_ptr<char[6][6]> board,
+void gameSetup(std::shared_ptr<char[6][6]> board,
                std::shared_ptr<bool[2]> IsAi) {
 
   bool validated = false;
@@ -34,11 +34,11 @@ bool gameSetup(std::shared_ptr<char[6][6]> board,
     colour = 'r';
     IsAi[x] = isAi;
   }
-
-  return true;
 }
 
 int main() {
+
+  srand(time(NULL));
 
   std::shared_ptr<char[6][6]> board(new char[6][6]);
   std::shared_ptr<bool[2]> IsAi(new bool[2]);
@@ -58,7 +58,7 @@ int main() {
     if (IsAi[player] == false) {
       move = player::move(board, colour);
     } else {
-      move = Ai::AiTurn(board, true, 4);
+      move = Ai::AiTurn(board, colour, true, 4);
     }
     int checkWin = BoardLogic::checkWin(board, move, -10, colour);
     if (checkWin == 3) {
