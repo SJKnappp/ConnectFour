@@ -15,7 +15,15 @@ int AiTurn(std::shared_ptr<BoardLogic> board, char colour, bool first,
     turn.move = rand() % 6;
   } else {
     turnCollection = minMax(*board, targetDepth, colour);
+
+    if (turnCollection.size() == 0) {
+      std::cout << "no move";
+    }
+
     turn = turnCollection[rand() % turnCollection.size()];
+    if (turn.move == -1) {
+      std::cout << "no move";
+    }
   }
 
   board->addMove(turn.move, colour);
@@ -28,29 +36,44 @@ std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
   std::vector<Move> best;
   best.push_back(Move(-1, -1000));
 
+  char player;
+  if (friendly == 1) {
+    player = colour;
+  } else {
+    if (colour == 'y')
+      player = 'r';
+    else
+      player = 'y';
+  }
+
   for (int i = 0; i < 7; i++) {
 
     if (!board.boardSpaceAvailable(i)) {
       continue;
     }
+    BoardLogic tempBoard = board;
+    tempBoard.addMove(i, player);
 
-    int currentScore = friendly * Score(board, colour, friendly, i);
+    int currentScore = friendly * Score(tempBoard, player, friendly, i);
     Move currentMove(i, currentScore);
 
     if (depth < targetDepth) {
-      BoardLogic tempBoard = board;
-      tempBoard.addMove(i, colour);
+
       std::vector<Move> scoreCollection =
           minMax(tempBoard, targetDepth, colour, depth + 1, friendly * -1);
       Move score = scoreCollection[rand() % scoreCollection.size()];
 
-      currentMove.score = score.score;
+      currentMove.score += score.score;
       if (currentMove.score > best[0].score) {
         best.clear();
         best.push_back(currentMove);
-      }
-      if (currentMove.score = best[0].score)
+      } else if (currentMove.score == best[0].score)
         best.push_back(currentMove);
+    } else {
+      if (best[0].score < currentScore) {
+        best[0].score = currentScore;
+        best[0].move = i;
+      }
     }
   }
   return best;
@@ -58,28 +81,21 @@ std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
 
 int Score(BoardLogic board, int colour, int friendly, int move, int height,
           int count, int direction) {
-  bool result = false;
-  bool player = colour;
-  if (friendly == -1) {
-    if (colour == 'y')
-      player = 'r';
-    if (colour == 'r')
-      player = 'y';
-  }
+  char player = colour;
 
   if (height == -10) {
     height = board.getHeight(move);
   }
 
-  if (move < 0 || move >= 6 || height < 0 || height >= 6) {
-    return false;
+  if (move < 0 || move >= 7 || height < 0 || height >= 6) {
+    return 0;
   }
 
   if (board.board[move][height] != player)
-    return false;
+    return count - 1;
 
-  int temp;
-  int best;
+  int temp = 0;
+  int best = 0;
   if (count < 3) {
     if (direction == 0 || direction == 1) {
       temp = Score(board, colour, friendly, move + 1, height, count + 1, 1);
@@ -116,14 +132,14 @@ int Score(BoardLogic board, int colour, int friendly, int move, int height,
         best = temp;
     }
     if (direction != 0)
-      best = result;
-    if (best < result)
-      best = result;
+      best = temp;
+    // if (best < result)
+    //  best = result;
 
     if (best > count)
-      return best;
+      return best ^ 4;
 
-    return result;
+    return count ^ 4;
   }
 }
 

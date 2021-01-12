@@ -58,16 +58,17 @@ int main() {
     if (IsAi[player] == false) {
       move = player::move(std::shared_ptr<BoardLogic>(board), colour);
     } else {
-      move = Ai::AiTurn(board, colour, false, 4);
+      move = Ai::AiTurn(board, colour, false, 8);
     }
     board->PrintBoard();
-    bool moveMade = board->checkMoveMade(old);
-    if (moveMade == false) {
+
+    // bool moveMade = board->checkMoveMade(old);
+    if (move == -1) {
       std::cout << "error: no move made";
       return 1;
     }
     int checkWin = board->checkWin(move, -10, colour);
-    if (checkWin == 3) {
+    if (checkWin >= 3) {
       board->PrintBoard();
       std::cout << colour << " has won";
       return 0;

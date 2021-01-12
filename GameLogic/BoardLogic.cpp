@@ -76,11 +76,12 @@ bool BoardLogic::checkEnd() {
 }
 
 int BoardLogic::getHeight(int move) {
-  for (int i = 5; i > 0; i--) {
+  for (int i = 5; i >= 0; i--) {
     if (board[move][i] != ' ') {
       return i;
     }
   }
+  return -1;
 }
 
 // dir 0 still 1 - 8 clockwise
@@ -140,8 +141,9 @@ int BoardLogic::checkWin(int move, int height, char player, int count,
     if (best > count)
       return best;
     return count;
+  } else {
+    return count;
   }
-  return count;
 }
 
 bool BoardLogic::checkMoveMade(BoardLogic old) {
