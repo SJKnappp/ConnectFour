@@ -10,7 +10,7 @@
 
 class BoardLogic {
 public:
-  char board[7][6];
+  std::string board;
 
   BoardLogic(std::shared_ptr<bool[2]> IsAi);
   void PrintBoard();

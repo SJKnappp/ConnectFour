@@ -98,7 +98,7 @@ int Score(BoardLogic board, int colour, int friendly, int move, int height,
     return 0;
   }
 
-  if (board.board[move][height] != player)
+  if (board.board.at(move * 6 + height) != player)
     return count - 1;
 
   int temp = 0;
