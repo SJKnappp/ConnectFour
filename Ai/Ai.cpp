@@ -57,6 +57,13 @@ std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
     int currentScore = friendly * Score(tempBoard, player, friendly, i);
     Move currentMove(i, currentScore);
 
+    if (currentScore >= 3 || currentScore <= -3) {
+      best.clear();
+      currentMove.score += 197 * friendly;
+      best.push_back(currentMove);
+      return best;
+    }
+
     if (depth < targetDepth) {
 
       std::vector<Move> scoreCollection =
@@ -137,9 +144,9 @@ int Score(BoardLogic board, int colour, int friendly, int move, int height,
     //  best = result;
 
     if (best > count)
-      return best ^ 4;
+      return best;
 
-    return count ^ 4;
+    return count;
   }
 }
 
