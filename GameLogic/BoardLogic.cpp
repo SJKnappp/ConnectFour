@@ -10,7 +10,7 @@ BoardLogic::BoardLogic(std::shared_ptr<bool[2]> IsAi) {
   // initiate board values
   for (int i = 0; i < 7; i++) {
     for (int j = 0; j < 6; j++) {
-      board[i][j] = ' ';
+      board[i * 6 + j] = ' ';
     }
   }
 
@@ -42,14 +42,14 @@ void BoardLogic::PrintBoard() {
   std::cout << "0123456" << std::endl;
   for (int j = 5; j >= 0; j--) {
     for (int i = 0; i < 7; i++) {
-      std::cout << board[i][j];
+      std::cout << board[i * 6 + j];
     }
     std::cout << std::endl;
   }
 }
 
 bool BoardLogic::boardSpaceAvailable(int move) {
-  if (board[move][5] == ' ')
+  if (board[move * 6 + 5] == ' ')
     return true;
   return false;
 }
@@ -57,8 +57,8 @@ bool BoardLogic::boardSpaceAvailable(int move) {
 bool BoardLogic::addMove(int move, char player) {
   if (this->boardSpaceAvailable(move) == true) {
     for (int i = 0; i < 6; i++) {
-      if (board[move][i] == ' ') {
-        board[move][i] = player;
+      if (board[move * 6 + i] == ' ') {
+        board[move * 6 + i] = player;
         return true;
       }
     }
@@ -68,7 +68,7 @@ bool BoardLogic::addMove(int move, char player) {
 
 bool BoardLogic::checkEnd() {
   for (int i = 0; i < 6; i++) {
-    if (board[i][5] == ' ') {
+    if (board[i * 6 + 5] == ' ') {
       return false;
     }
   }
@@ -77,7 +77,7 @@ bool BoardLogic::checkEnd() {
 
 int BoardLogic::getHeight(int move) {
   for (int i = 5; i >= 0; i--) {
-    if (board[move][i] != ' ') {
+    if (board[move * 6 + i] != ' ') {
       return i;
     }
   }
@@ -97,7 +97,7 @@ int BoardLogic::checkWin(int move, int height, char player, int count,
     return 0;
   }
 
-  if (board[move][height] != player)
+  if (board[move * 6 + height] != player)
     return 0;
 
   if (count < 3) {
@@ -149,7 +149,7 @@ int BoardLogic::checkWin(int move, int height, char player, int count,
 bool BoardLogic::checkMoveMade(BoardLogic old) {
   for (int i = 0; i < 7; i++) {
     for (int j = 0; j < 6; j++) {
-      if (this->board[i][j] != old.board[i][j]) {
+      if (this->board[i * 6 + j] != old.board[i * 6 + j]) {
         return true;
       }
     }
