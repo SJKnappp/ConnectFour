@@ -7,10 +7,11 @@
 
 #include <iostream>
 #include <memory>
+#include <vector>
 
 class BoardLogic {
 public:
-  std::string board;
+  std::array<char, 42> board;
 
   BoardLogic(std::shared_ptr<bool[2]> IsAi);
   void PrintBoard();

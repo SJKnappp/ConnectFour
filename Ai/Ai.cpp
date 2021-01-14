@@ -5,25 +5,37 @@
 #include "Ai.h"
 
 namespace Ai {
+// class holder{
+// public:
+//  std::map<std::array<char, 42>, int> oldMoves;
+//};
+class minMaxReturn {
+public:
+  std::vector<Move> move;
+  std::map<std::array<char, 42>, int> map;
+};
 
 int AiTurn(std::shared_ptr<BoardLogic> board, char colour, bool first,
            int targetDepth) {
-  std::vector<Move> turnCollection;
-  Move turn(-1, -1);
 
-  if (first) {
-    turn.move = rand() % 6;
-  } else {
-    turnCollection = minMax(*board, targetDepth, colour);
+  std::map<std::array<char, 42>, int> oldMoves;
+  Move turnCollection(oldMoves);
+  Move::MoveInfo turn(-1, -1000);
 
-    if (turnCollection.size() == 0) {
-      std::cout << "no move";
-    }
+  // std::unique_ptr<holder> hold;
+  // hold->oldMoves[board->board] = 1;
+  oldMoves.insert(std::pair<std::array<char, 42>, int>(board->board, 0));
+  int test = oldMoves.at(board->board);
 
-    turn = turnCollection[rand() % turnCollection.size()];
-    if (turn.move == -1) {
-      std::cout << "no move";
-    }
+  turnCollection = minMax(*board, targetDepth, colour, oldMoves);
+
+  if (turnCollection.move.size() == 0) {
+    std::cout << "no move";
+  }
+
+  turn = turnCollection.move[rand() % turnCollection.move.size()];
+  if (turn.move == -1) {
+    std::cout << "no move";
   }
 
   board->addMove(turn.move, colour);
@@ -31,10 +43,10 @@ int AiTurn(std::shared_ptr<BoardLogic> board, char colour, bool first,
   return turn.move;
 }
 
-std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
-                         int depth, int friendly) {
-  std::vector<Move> best;
-  best.push_back(Move(-1, -1000));
+Move minMax(BoardLogic board, int targetDepth, char colour,
+            std::map<std::array<char, 42>, int> oldChecks, int depth,
+            int friendly) {
+  Move best(oldChecks);
 
   char player;
   if (friendly == 1) {
@@ -54,32 +66,42 @@ std::vector<Move> minMax(BoardLogic board, int targetDepth, char colour,
     BoardLogic tempBoard = board;
     tempBoard.addMove(i, player);
 
+    if (oldChecks.contains(tempBoard.board)) {
+      Move::MoveInfo possibleBest(i, best.map[board.board]);
+      best.FindMove(possibleBest);
+      continue;
+    }
+
     int currentScore = friendly * Score(tempBoard, player, friendly, i);
-    Move currentMove(i, currentScore);
+    Move::MoveInfo currentMove(i, currentScore);
+    if (depth == targetDepth) {
+      best.map[board.board] = currentScore;
+    }
 
     if (currentScore >= 3 || currentScore <= -3) {
-      best.clear();
+      best.move.clear();
       currentMove.score += 197 * friendly;
-      best.push_back(currentMove);
+      best.move.push_back(currentMove);
+      best.map[board.board] = currentMove.score;
       return best;
     }
 
     if (depth < targetDepth) {
 
-      std::vector<Move> scoreCollection =
-          minMax(tempBoard, targetDepth, colour, depth + 1, friendly * -1);
-      Move score = scoreCollection[rand() % scoreCollection.size()];
+      Move scoreCollection = minMax(tempBoard, targetDepth, colour, best.map,
+                                    depth + 1, friendly * -1);
+      best.map = scoreCollection.map;
+      Move::MoveInfo score = scoreCollection.move[0];
 
       currentMove.score += score.score;
-      if (currentMove.score > best[0].score) {
-        best.clear();
-        best.push_back(currentMove);
-      } else if (currentMove.score == best[0].score)
-        best.push_back(currentMove);
+
+      best.map[tempBoard.board] = currentMove.score;
+
+      best.FindMove(currentMove);
     } else {
-      if (best[0].score < currentScore) {
-        best[0].score = currentScore;
-        best[0].move = i;
+      if (best.move[0].score < currentScore) {
+        best.move[0].score = currentScore;
+        best.move[0].move = i;
       }
     }
   }
@@ -98,7 +120,7 @@ int Score(BoardLogic board, int colour, int friendly, int move, int height,
     return 0;
   }
 
-  if (board.board.at(move * 6 + height) != player)
+  if (board.board[move * 6 + height] != player)
     return count - 1;
 
   int temp = 0;

@@ -1,41 +1,5 @@
 #include "main.h"
 
-void gameSetup(std::shared_ptr<char[7][6]> board,
-               std::shared_ptr<bool[2]> IsAi) {
-
-  bool validated = false;
-
-  // initiate board values
-  for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < 6; j++) {
-      board.get()[i][j] = ' ';
-    }
-  }
-
-  char colour = 'y';
-  for (int x = 0; x < 2; x++) {
-    bool isAi;
-    bool chossen = false;
-    std::string choice;
-    std::cout << "is " << colour << " an AI y/n";
-
-    while (chossen == false) {
-      std::cin >> choice;
-      chossen = true;
-      if (choice == "y")
-        isAi = true;
-      else if (choice == "n")
-        isAi = false;
-      else {
-        chossen = false;
-        std::cout << "option no recognised is " << colour << " an AI y/n: ";
-      }
-    }
-    colour = 'r';
-    IsAi[x] = isAi;
-  }
-}
-
 int main() {
 
   srand(time(NULL));
